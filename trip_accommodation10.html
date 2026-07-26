@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Москва — Грузия · Август 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:#f7f3ee; --dark:#1c1a17; --brown:#8b6f47; --rust:#c4622d;
+  --sage:#7a8c6e; --muted:#a09880; --border:#e2dbd0; --green-dark:#2d3a2e; --white:#fff;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Jost',sans-serif;background:var(--cream);color:var(--dark);min-height:100vh;}
+
+/* HEADER */
+header{padding:36px 32px 24px;border-bottom:1px solid var(--border);background:var(--white);}
+.trip-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;font-weight:300;}
+h1{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:300;line-height:1.15;margin-bottom:6px;}
+h1 em{font-style:italic;color:var(--rust);}
+.subtitle{font-size:12px;color:var(--muted);font-weight:300;letter-spacing:.5px;}
+
+/* TABS */
+.tabs{display:flex;gap:2px;padding:0 32px;background:var(--white);border-bottom:2px solid var(--border);position:sticky;top:0;z-index:100;}
+.tab-btn{font-family:'Jost',sans-serif;font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:500;padding:16px 20px 14px;border:none;background:transparent;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .2s,border-color .2s;}
+.tab-btn:hover{color:var(--dark);}
+.tab-btn.active{color:var(--rust);border-bottom-color:var(--rust);}
+
+/* TAB CONTENT */
+.tab-content{display:none;padding:32px;max-width:1100px;margin:0 auto;}
+.tab-content.active{display:block;}
+
+/* SECTION LABEL */
+.sec-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin:28px 0 10px;display:flex;align-items:center;gap:12px;}
+.sec-label::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* ROUTE TABLE */
+.route-table{width:100%;border-collapse:collapse;font-size:13px;}
+.route-table th{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:500;padding:8px 12px;text-align:left;border-bottom:1px solid var(--border);}
+.route-table td{padding:10px 12px;border-bottom:1px solid #f0ece5;vertical-align:top;line-height:1.4;}
+tr.drive td{background:var(--white);}
+tr.stay td{background:#fafaf8;color:var(--muted);}
+tr.warn td{background:#fdf5f0;}
+tr.warn td:first-child{border-left:3px solid var(--rust);}
+tr.relax td{background:#f4f7f2;}
+tr.total-row td{border-top:2px solid var(--border);font-weight:600;padding-top:14px;}
+.day-num{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;color:var(--muted);}
+.day-date{font-size:11px;color:var(--dark);font-weight:500;}
+.rdate{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;color:var(--dark);line-height:1.05;}
+.rord{font-size:10px;color:var(--muted);margin-top:3px;letter-spacing:.3px;}
+.rbadge{display:inline-block;font-size:9px;letter-spacing:1px;text-transform:uppercase;padding:1px 6px;border-radius:2px;margin-top:3px;}
+.rb-drive{background:#eef1eb;color:var(--sage);}
+.rb-stay{background:#f5f2ee;color:var(--muted);}
+.rb-warn{background:#fdf0e8;color:var(--rust);}
+.rb-relax{background:#eef1eb;color:var(--sage);}
+.km-sub{font-size:10px;color:var(--muted);margin-top:2px;}
+
+/* STOP ROW */
+.stop-row{display:grid;grid-template-columns:100px 1fr;margin-bottom:3px;background:var(--white);border:1px solid var(--border);border-radius:4px;overflow:hidden;}
+.stop-row:hover{box-shadow:0 3px 12px rgba(0,0,0,.06);}
+.sdate{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:14px 8px;text-align:center;}
+.sdate.cd{background:var(--dark);color:var(--white);}
+.sdate.cr{background:var(--rust);color:var(--white);}
+.sdate.cg{background:var(--green-dark);color:var(--white);}
+.sdate.cm{background:#3a3530;color:var(--white);}
+.sd{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:300;line-height:1;}
+.sm{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:2px;}
+.sn{font-size:9px;color:rgba(255,255,255,.7);margin-top:5px;letter-spacing:.5px;}
+.sbody{padding:14px 20px;}
+.shead{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+.scity{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;}
+.stag{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;padding:2px 8px;border-radius:2px;font-weight:500;}
+.st-transit{background:#f0ece5;color:var(--muted);}
+.st-key{background:#fdf0e8;color:var(--rust);}
+.st-full{background:#eef1eb;color:var(--sage);}
+.stbd{font-size:11px;color:var(--muted);font-style:italic;}
+
+/* CARDS GRID */
+.cards-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+
+/* PROP CARD */
+.prop-card{border:1px solid var(--border);border-radius:4px;overflow:hidden;background:var(--cream);transition:box-shadow .2s;display:flex;flex-direction:column;}
+.prop-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.09);}
+.prop-inner{padding:12px 14px;display:flex;flex-direction:column;gap:9px;flex:1;}
+
+/* card header */
+.chead{display:flex;align-items:flex-start;gap:8px;}
+.cnum{width:18px;height:18px;border-radius:50%;background:var(--dark);color:white;font-size:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.ctitle{flex:1;min-width:0;}
+.cname{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--dark);text-decoration:none;border-bottom:1px solid var(--border);transition:color .15s;display:block;line-height:1.3;}
+.cname:hover{color:var(--rust);}
+.csource{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-top:2px;}
+.crating{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:600;white-space:nowrap;color:var(--brown);}
+.crating.top{color:var(--sage);}
+
+/* specs */
+.cspecs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px 6px;}
+.sp{display:flex;flex-direction:column;}
+.sp-l{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);}
+.sp-v{font-size:12px;}
+.sp-v.ok{color:var(--sage);}
+.sp-v.unk{color:var(--muted);font-style:italic;font-size:10px;}
+
+/* price block */
+.cprice{background:var(--white);border:1px solid var(--border);border-radius:3px;padding:7px 10px;display:flex;flex-direction:column;gap:2px;}
+.cp-total{font-size:12px;font-weight:500;color:var(--dark);}
+.cp-nights{font-size:9px;color:var(--muted);}
+.cp-night{font-size:11px;color:var(--brown);font-weight:500;}
+.cstatus{font-size:8.5px;letter-spacing:1px;text-transform:uppercase;padding:3px 7px;border-radius:3px;white-space:nowrap;align-self:flex-start;font-weight:500;}
+.cstatus.ok{background:#eaf3ea;color:var(--sage);border:1px solid var(--sage);}
+.cstatus.pending{background:#fdf3e7;color:var(--rust);border:1px solid var(--rust);}
+.budget-total{background:#f6efe3;border:1px solid var(--brown);border-radius:5px;padding:10px 14px;}
+.budget-total h3{color:var(--rust);}
+
+/* tags */
+.ctags{display:flex;flex-direction:column;gap:3px;}
+.plus{font-size:10.5px;color:var(--sage);padding-left:12px;position:relative;}
+.plus::before{content:'+';position:absolute;left:0;font-weight:600;}
+.minus{font-size:10.5px;color:#b07050;padding-left:12px;position:relative;}
+.minus::before{content:'−';position:absolute;left:0;font-weight:600;}
+
+/* REACTIONS */
+.creact{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:8px;border-top:1px solid var(--border);}
+.react-label{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+.react-btns{display:flex;gap:5px;}
+.rbtn{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--border);background:var(--white);cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .18s;line-height:1;}
+.rbtn:hover{transform:scale(1.15);border-color:var(--muted);}
+.rbtn.rl.on{background:#ffeef0;border-color:#e05c6e;box-shadow:0 0 0 2px rgba(224,92,110,.15);}
+.rbtn.rq.on{background:#fffbeb;border-color:#d69e2e;box-shadow:0 0 0 2px rgba(214,158,46,.15);}
+.rbtn.rx.on{background:#f0f0f0;border-color:#8a8a8a;box-shadow:0 0 0 2px rgba(138,138,138,.15);}
+
+.sub-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:8px 0 8px;padding-left:2px;border-left:2px solid var(--border);padding-left:8px;}
+.spec-unk{color:var(--muted);font-style:italic;font-size:11px;}
+.crating.unk{font-size:11px;color:var(--muted);font-style:italic;}
+
+
+.st-opt{color:var(--sage);}
+
+/* LINKS FEATURE */
+.stop-links{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;min-height:0;}
+.link-item{display:flex;align-items:center;gap:5px;background:var(--white);border:1px solid var(--border);border-radius:3px;padding:4px 8px;font-size:11px;}
+.link-item a{color:var(--brown);text-decoration:none;max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.link-item a:hover{color:var(--rust);}
+.link-remove{border:none;background:none;color:var(--muted);cursor:pointer;font-size:10px;padding:0;line-height:1;flex-shrink:0;}
+.link-remove:hover{color:var(--rust);}
+.add-link-btn{margin-top:8px;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;border:1px dashed var(--border);background:transparent;color:var(--muted);padding:4px 12px;border-radius:3px;cursor:pointer;font-family:'Jost',sans-serif;display:inline-block;}
+.add-link-btn:hover{color:var(--brown);border-color:var(--brown);}
+.link-form{display:none;gap:6px;margin-top:6px;flex-wrap:wrap;align-items:center;}
+.link-form.open{display:flex;}
+.link-input{font-family:'Jost',sans-serif;font-size:11px;border:1px solid var(--border);border-radius:3px;padding:5px 8px;background:var(--white);color:var(--dark);width:140px;}
+.link-input.url{flex:1;min-width:180px;}
+.link-input:focus{outline:none;border-color:var(--brown);}
+.link-save-btn{font-family:'Jost',sans-serif;font-size:9px;letter-spacing:1px;text-transform:uppercase;border:1px solid var(--brown);background:transparent;color:var(--brown);padding:5px 12px;border-radius:3px;cursor:pointer;white-space:nowrap;}
+.link-save-btn:hover{background:var(--brown);color:white;}
+
+/* SHARE BAR */
+.share-bar{display:flex;gap:8px;padding:14px 32px;background:var(--white);border-bottom:1px solid var(--border);}
+.share-btn{font-family:'Jost',sans-serif;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;border:1px solid var(--border);background:transparent;color:var(--muted);padding:7px 16px;border-radius:3px;cursor:pointer;transition:all .15s;}
+.share-btn.export:hover{border-color:var(--sage);color:var(--sage);}
+.share-btn.import:hover{border-color:var(--rust);color:var(--rust);}
+.share-hint{font-size:10px;color:var(--muted);display:flex;align-items:center;gap:6px;flex:1;font-style:italic;}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--dark);color:white;padding:9px 22px;border-radius:20px;font-size:12px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;white-space:nowrap;}
+.toast.show{opacity:1;}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;display:none;align-items:center;justify-content:center;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--white);border-radius:6px;padding:24px;max-width:480px;width:90%;display:flex;flex-direction:column;gap:12px;}
+.modal h3{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;}
+.modal p{font-size:12px;color:var(--muted);line-height:1.5;}
+.modal textarea{font-family:monospace;font-size:11px;border:1px solid var(--border);border-radius:3px;padding:8px;resize:vertical;height:80px;width:100%;}
+.modal-btns{display:flex;gap:8px;justify-content:flex-end;}
+.modal-btn{font-family:'Jost',sans-serif;font-size:10px;letter-spacing:1px;text-transform:uppercase;border:1px solid var(--border);background:transparent;color:var(--muted);padding:7px 16px;border-radius:3px;cursor:pointer;}
+.modal-btn.primary{border-color:var(--brown);color:var(--brown);}
+.modal-btn.primary:hover{background:var(--brown);color:white;}
+
+
+/* STOP DESCRIPTION */
+.sdesc{font-size:12px;color:var(--brown);font-style:italic;margin:-4px 0 12px;line-height:1.4;padding-left:2px;}
+
+/* MAP */
+.map-wrap{position:relative;background:linear-gradient(180deg,#fbf7f0 0%,#f4ede3 100%);border:1px solid var(--border);border-radius:6px;padding:24px;overflow:hidden;}
+.route-map{width:100%;height:auto;display:block;max-width:900px;margin:0 auto;}
+.map-legend{display:flex;flex-wrap:wrap;gap:18px;margin-top:16px;padding-top:14px;border-top:1px solid var(--border);justify-content:center;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+.legend-item{display:flex;align-items:center;gap:6px;}
+.legend-dot{width:10px;height:10px;border-radius:50%;}
+.legend-line{width:24px;height:2px;}
+
+/* SVG elements */
+.country-label{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;fill:var(--muted);opacity:.25;letter-spacing:8px;pointer-events:none;}
+.sea-label{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:300;font-style:italic;fill:#5a8aa8;opacity:.6;letter-spacing:3px;pointer-events:none;}
+.border-line{stroke:var(--muted);stroke-width:1;stroke-dasharray:3,4;fill:none;opacity:.4;}
+
+.route-path{fill:none;stroke:var(--rust);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
+.route-return{fill:none;stroke:var(--rust);stroke-width:1.8;stroke-linecap:round;stroke-dasharray:5,5;opacity:.55;}
+
+#map.tab-content.active .route-path,
+#map.tab-content.active .route-return{
+  stroke-dasharray:3500;stroke-dashoffset:3500;
+  animation:drawRoute 3.5s ease-out forwards;
+}
+#map.tab-content.active .route-return{
+  animation:drawRoute 3.5s ease-out forwards, dashReturn .01s 3.5s forwards;
+}
+@keyframes drawRoute{to{stroke-dashoffset:0;}}
+@keyframes dashReturn{to{stroke-dasharray:5,5;stroke-dashoffset:0;}}
+
+.city{cursor:pointer;}
+.city .city-circle{transition:transform .2s,fill .2s;transform-origin:center;transform-box:fill-box;}
+.city:hover .city-circle{transform:scale(1.25);}
+.city .city-name{font-family:'Cormorant Garamond',serif;font-size:14px;fill:var(--dark);font-weight:500;pointer-events:none;}
+.city .city-day{font-family:'Jost',sans-serif;font-size:9px;fill:white;font-weight:600;pointer-events:none;text-anchor:middle;dominant-baseline:central;}
+.city .hit{fill:transparent;}
+
+.city.t-home .city-circle{fill:var(--dark);}
+.city.t-transit .city-circle{fill:#3a3530;}
+.city.t-stay .city-circle{fill:var(--green-dark);}
+.city.t-key .city-circle{fill:var(--rust);}
+
+/* Tooltip */
+.map-tooltip{position:fixed;background:var(--dark);color:white;padding:10px 14px;border-radius:4px;font-size:12px;max-width:240px;line-height:1.4;pointer-events:none;opacity:0;transition:opacity .2s;z-index:50;box-shadow:0 4px 16px rgba(0,0,0,.25);}
+.map-tooltip.show{opacity:1;}
+.tt-name{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:500;color:var(--rust);margin-bottom:3px;}
+.tt-desc{font-size:11px;color:rgba(255,255,255,.85);}
+.tt-action{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-top:6px;}
+
+.scroll-highlight{box-shadow:0 0 0 3px var(--rust)!important;transition:box-shadow .3s!important;}
+
+/* ROUTE SUMMARY */
+.route-summary{max-width:900px;margin:32px auto 0;}
+.summary-intro{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;margin-bottom:4px;}
+.summary-intro em{font-style:italic;color:var(--rust);}
+.summary-sub{font-size:12px;color:var(--muted);margin-bottom:22px;font-style:italic;}
+.summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.summary-block{background:var(--white);border:1px solid var(--border);border-radius:5px;padding:16px 18px;}
+.summary-block.wide{grid-column:1/-1;}
+.summary-block h3{font-family:'Jost',sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-weight:500;color:var(--rust);margin-bottom:11px;}
+.summary-block ul{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.summary-block li{font-size:12.5px;line-height:1.5;color:var(--dark);padding-left:15px;position:relative;}
+.summary-block li::before{content:'—';position:absolute;left:0;color:var(--muted);}
+.summary-block li strong{color:var(--dark);font-weight:500;}
+.summary-block li .accent{color:var(--rust);font-weight:500;}
+@media(max-width:700px){.summary-grid{grid-template-columns:1fr;}.summary-intro{font-size:22px;}}
+
+
+/* RESPONSIVE */
+@media(max-width:700px){
+  header{padding:20px 16px;}
+  h1{font-size:26px;}
+  .tabs{padding:0 16px;overflow-x:auto;}
+  .tab-content{padding:16px;}
+  .cards-grid{grid-template-columns:1fr;}
+  .stop-row{grid-template-columns:74px 1fr;}
+  .route-table{font-size:11px;}
+  .route-table td,.route-table th{padding:7px 6px;}
+}
+
+/* GUIDE ACCORDION */
+.guide-note{max-width:920px;margin:0 auto 16px;font-size:11px;color:var(--muted);padding:8px 12px;background:#fbf3e8;border-left:3px solid var(--rust);border-radius:4px;}
+.day-card{max-width:920px;margin:0 auto 10px;border:1px solid var(--border);border-radius:6px;overflow:hidden;background:var(--white);}
+.day-head{display:flex;align-items:center;gap:12px;padding:13px 16px;cursor:pointer;user-select:none;transition:background .15s;}
+.day-head:hover{background:#faf6ef;}
+.day-date-badge{font-family:'Cormorant Garamond',serif;font-size:15px;color:var(--rust);white-space:nowrap;min-width:76px;font-weight:600;}
+.day-title{flex:1;font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--dark);line-height:1.2;}
+.day-teaser{font-family:'Jost',sans-serif;font-size:11px;color:var(--muted);margin-top:2px;}
+.day-arrow{transition:transform .2s;color:var(--muted);font-size:12px;}
+.day-card.open .day-arrow{transform:rotate(90deg);}
+.day-body{display:none;padding:4px 18px 18px;border-top:1px solid var(--border);}
+.day-card.open .day-body{display:block;}
+.gblock{margin-top:14px;}
+.gblock h4{font-family:'Jost',sans-serif;font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--brown);margin-bottom:6px;border-left:2px solid var(--rust);padding-left:8px;}
+.gblock p{font-size:12.5px;line-height:1.55;color:var(--dark);}
+.gblock ul{list-style:none;display:flex;flex-direction:column;gap:5px;}
+.gblock li{font-size:12.5px;line-height:1.5;color:var(--dark);padding-left:14px;position:relative;}
+.gblock li::before{content:'·';position:absolute;left:3px;color:var(--rust);font-weight:700;}
+.gtime{color:var(--rust);font-weight:600;}
+.gprice{color:var(--sage);font-weight:600;font-size:11.5px;}
+.gfree{color:var(--sage);font-weight:600;font-size:11.5px;}
+.ghours{color:var(--muted);font-size:11px;}
+.gdur{display:inline-block;background:#efe9dd;color:var(--brown);font-size:10.5px;font-weight:600;padding:1px 6px;border-radius:3px;white-space:nowrap;}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="trip-label">Грузия · перелёт + прокат авто</div>
+  <h1>Грузия: столица, вино и <em>море</em></h1>
+  <div class="subtitle">14–30 августа 2026 &nbsp;·&nbsp; 4 человека &nbsp;·&nbsp; перелёт Москва–Тбилиси &nbsp;·&nbsp; прокат авто &nbsp;·&nbsp; ~1200 км &nbsp;·&nbsp; 16 ночей</div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" onclick="showTab('route',this)">Маршрут</button>
+  <button class="tab-btn" onclick="showTab('map',this)">Карта</button>
+  <button class="tab-btn" onclick="showTab('stay',this)">Жильё</button>
+  <button class="tab-btn" onclick="showTab('guide',this)">Гид</button>
+</nav>
+
+<!-- ══════════ TAB 1: МАРШРУТ ══════════ -->
+<section id="route" class="tab-content active">
+
+  <div class="sec-label">Маршрут по Грузии · 16 ночей</div>
+  <table class="route-table">
+    <thead><tr>
+      <th style="width:76px">День</th><th>Маршрут</th>
+      <th style="width:120px">Км</th><th style="width:110px">За рулём</th><th>Примечание</th>
+    </tr></thead>
+    <tbody>
+      <tr class="drive"><td><div class="rdate">14 авг</div><div class="rord">(1 день)</div><span class="rbadge rb-drive">✈️ Перелёт</span></td><td>Москва 20:10 → <strong>Тбилиси</strong></td><td>—</td><td>—</td><td>Прилёт 15-го 00:35 (Жуковский ZIA → TBS) · ночёвка ibis · прокат авто</td></tr>
+      <tr class="drive"><td><div class="rdate">15 авг</div><div class="rord">(2 день)</div><span class="rbadge rb-drive">Перегон</span></td><td>Тбилиси → <strong>Виноградники</strong> (Кахетия)</td><td>~100</td><td>~2 ч</td><td>Проснулись — сразу на вино · дегустация</td></tr>
+      <tr class="drive"><td><div class="rdate">16 авг</div><div class="rord">(3 день)</div><span class="rbadge rb-drive">Перегон</span></td><td>Виноградники → <strong>Тбилиси</strong></td><td>~110</td><td>~2 ч</td><td>День в столице · ночёвка</td></tr>
+      <tr class="drive"><td><div class="rdate">17 авг</div><div class="rord">(4 день)</div><span class="rbadge rb-drive">Перегон</span></td><td>Тбилиси → <strong>Казбеги</strong></td><td>~155</td><td>~3,5 ч</td><td>Военно-Грузинская · Ананури, Гудаури · Гергети</td></tr>
+      <tr class="drive"><td><div class="rdate">18 авг</div><div class="rord">(5 день)</div><span class="rbadge rb-drive">Перегон</span></td><td>Казбеги → Мцхета → <strong>Уплисцихе</strong></td><td>~200</td><td>~3,5 ч</td><td>Мцхета 13–15 · Уплисцихе к 16 · ночёвка</td></tr>
+      <tr class="drive"><td><div class="rdate">19 авг</div><div class="rord">(6 день)</div><span class="rbadge rb-drive">Перегон</span></td><td>Уплисцихе → <strong>Кутаиси</strong></td><td>~150</td><td>~2 ч</td><td>Утром пещеры · днём выезд</td></tr>
+      <tr class="stay"><td><div class="rdate">20 авг</div><div class="rord">(7 день)</div><span class="rbadge rb-stay">На месте</span></td><td>— <strong>Кутаиси</strong> — Прометей, Гелати, Сатаплия</td><td>—</td><td>—</td><td>Полный день Имеретии</td></tr>
+      <tr class="stay"><td><div class="rdate">21 авг</div><div class="rord">(8 день)</div><span class="rbadge rb-stay">На месте</span></td><td>— <strong>Кутаиси</strong> — Мартвили + Окаце/Кинчха</td><td>—</td><td>—</td><td>Полный день каньонов</td></tr>
+      <tr class="drive"><td><div class="rdate">22 авг</div><div class="rord">(9 день)</div><span class="rbadge rb-drive">Перегон</span></td><td>Кутаиси → <strong>Шекветили</strong></td><td>~95</td><td>~2 ч</td><td>Заезд на море</td></tr>
+      <tr class="relax"><td><div class="rdate">23–27 авг</div><div class="rord">(10–14 день)</div><span class="rbadge rb-relax">Релакс</span></td><td>— <strong>Шекветили</strong> — море + радиалки в Батуми (~44 км) и окрестности</td><td>—</td><td>—</td><td>5 дней моря</td></tr>
+      <tr class="drive"><td><div class="rdate">28 авг</div><div class="rord">(15 день)</div><span class="rbadge rb-drive">Перегон</span></td><td>Шекветили → <strong>Боржоми</strong></td><td>~215</td><td>~3–3,5 ч</td><td>Парк · источник · серные ванны</td></tr>
+      <tr class="drive"><td><div class="rdate">29 авг</div><div class="rord">(16 день)</div><span class="rbadge rb-drive">Перегон</span></td><td>Боржоми → <strong>Тбилиси</strong></td><td>~160</td><td>~2,5 ч</td><td>Финальный день в столице</td></tr>
+      <tr class="drive"><td><div class="rdate">30 авг</div><div class="rord">(17 день)</div><span class="rbadge rb-drive">✈️ Вылет</span></td><td>Тбилиси → аэропорт → <strong>Москва</strong></td><td>~17</td><td>~30 мин</td><td>Сдать авто · вылет 12:45</td></tr>
+      <tr class="total-row"><td colspan="2">Итого по Грузии</td><td>~1200 км</td><td colspan="2">+ радиалки с моря</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:11px;color:var(--muted);margin-top:12px;">📍 Самый насыщенный за рулём — 17–18-е (Военно-Грузинская в Казбеги и обратно через Мцхету). Дорога горная, серпантин: выезжать утром, закладывать время на остановки.</p>
+
+
+
+  <div class="route-summary">
+    <div class="summary-intro">Бюджет <em>поездки</em></div>
+    <div class="summary-sub">Общие траты (жильё, авто) делим на троих взрослых — ребёнок не платит. Авиабилеты каждый взрослый оплачивает свой.</div>
+
+    <div class="summary-grid">
+
+      <div class="summary-block wide">
+        <h3>✈️ Перелёт · Red Wings (Ту-204)</h3>
+        <ul>
+          <li><strong>Москва → Тбилиси:</strong> WZ 569 · 14 авг 20:10 (Жуковский ZIA) → 15 авг 00:35 (Шота Руставели TBS) · 3 ч 25 м</li>
+          <li><strong>Тбилиси → Москва:</strong> WZ 560 · 30 авг 12:45 (TBS) → 15:00 (Жуковский ZIA) · 3 ч 15 м</li>
+          <li>Эконом · без багажа · бронь VBGS1N</li>
+          <li><span class="accent">37 135 ₽ / билет</span> — каждый взрослый свой; детский (та же цена) за скобками</li>
+        </ul>
+      </div>
+
+      <div class="summary-block">
+        <h3>🚗 Аренда авто</h3>
+        <ul>
+          <li>Аэропорт Тбилиси · 15.08 11:00 → 30.08 09:00</li>
+          <li>~40 000 ₽ · на троих ~13 333 ₽ <em>(уточним)</em></li>
+        </ul>
+      </div>
+
+      <div class="summary-block">
+        <h3>🏨 Жильё</h3>
+        <ul>
+          <li>Забронировано 11 ночей: 111 993 ₽</li>
+          <li>На троих: 37 331 ₽ · ещё 5 ночей не забронированы</li>
+        </ul>
+      </div>
+
+      <div class="summary-block wide budget-total">
+        <h3>💰 Промежуточный итог</h3>
+        <ul>
+          <li><strong>На одного взрослого:</strong> перелёт 37 135 + жильё 37 331 + авто 13 333 = <span class="accent">87 799 ₽</span></li>
+          <li><strong>Общее (3 взрослых):</strong> <span class="accent">263 398 ₽</span> &nbsp;(+ детский билет 37 135 за скобками)</li>
+          <li>Без 5 ненаброненных ночей, экскурсий и еды</li>
+        </ul>
+      </div>
+
+      <div class="summary-block">
+        <h3>🎟️ Экскурсии / мероприятия</h3>
+        <ul><li>— посчитаем и заполним позже</li></ul>
+      </div>
+
+      <div class="summary-block">
+        <h3>🍽️ Еда и прочее (в день)</h3>
+        <ul><li>— посчитаем и заполним позже</li></ul>
+      </div>
+
+    </div>
+  </div>
+
+</section>
+
+<!-- ══════════ TAB 2: КАРТА ══════════ -->
+<section id="map" class="tab-content">
+
+  <div class="map-wrap">
+    <svg viewBox="0 0 1000 560" class="route-map" preserveAspectRatio="xMidYMid meet" id="route-svg">
+
+      <defs>
+        <linearGradient id="sea-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#7aa8c4" stop-opacity="0.45"/>
+          <stop offset="100%" stop-color="#9ec1d4" stop-opacity="0.12"/>
+        </linearGradient>
+        <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="var(--rust)"/>
+        </marker>
+      </defs>
+
+      <!-- Чёрное море (слева) -->
+      <path d="M -20,60 Q 80,200 95,300 Q 80,470 -20,560 L -20,60 Z" fill="url(#sea-grad)"/>
+      <text x="36" y="300" class="sea-label" transform="rotate(-90 36 300)">Чёрное море</text>
+
+      <!-- Страна -->
+      <text x="430" y="128" class="country-label">ГРУЗИЯ</text>
+
+      <!-- Кавказ (север) -->
+      <g opacity="0.13" fill="var(--brown)">
+        <path d="M 250,152 L 300,106 L 350,152 Z"/>
+        <path d="M 350,152 L 410,100 L 470,152 Z"/>
+        <path d="M 470,150 L 525,98 L 580,150 Z"/>
+        <path d="M 580,152 L 640,104 L 700,152 Z"/>
+        <path d="M 700,150 L 752,108 L 804,150 Z"/>
+      </g>
+
+      <g id="route-paths"></g>
+      <g id="city-markers"></g>
+
+    </svg>
+
+    <div class="map-legend">
+      <div class="legend-item"><span class="legend-line" style="background:var(--rust);"></span> К морю</div>
+      <div class="legend-item"><span class="legend-line" style="background:repeating-linear-gradient(to right, var(--rust) 0 4px, transparent 4px 9px);"></span> Обратно · через Боржоми</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--rust);"></span> Ключевые: Сигнахи · Шекветили</div>
+      <div class="legend-item"><span class="legend-dot" style="background:var(--green-dark);"></span> Ночёвки</div>
+      <div class="legend-item"><span class="legend-dot" style="background:#3a3530;"></span> Транзит · Мцхета</div>
+      <div class="legend-item" style="font-style:italic;color:var(--brown);">💡 Кликните на точку — откроется жильё</div>
+    </div>
+  </div>
+
+  <div id="map-tooltip" class="map-tooltip"></div>
+
+  <div class="route-summary">
+    <div class="summary-intro">Что смотрим <em>в каждой точке</em></div>
+    <div class="summary-sub">Предварительно — дополним деталями позже</div>
+
+    <div class="summary-grid">
+      <div class="summary-block"><h3>🏙️ Тбилиси</h3><ul><li>Старый город, серные бани Абанотубани</li><li>Мост Мира, крепость Нарикала, канатка</li><li>Мцхета рядом: Джвари, Светицховели</li></ul></div>
+      <div class="summary-block"><h3>🍇 Кахетия · Сигнахи</h3><ul><li>Винодельни, дегустации</li><li>«Город любви» Сигнахи, крепостные стены</li><li>Монастырь Бодбе</li></ul></div>
+      <div class="summary-block"><h3>🏔️ Казбеги</h3><ul><li>Церковь Гергети (Троицкая)</li><li>Ананури, Гудаури, Монумент дружбы</li><li>Виды на Казбек</li></ul></div>
+      <div class="summary-block"><h3>🏛️ Уплисцихе / Гори</h3><ul><li>Пещерный город Уплисцихе</li><li>Мцхета по дороге (13–15)</li><li>Музей Сталина в Гори</li></ul></div>
+      <div class="summary-block"><h3>🌿 Кутаиси · Имеретия</h3><ul><li>Пещера Прометея, Сатаплия</li><li>Каньоны Мартвили и Окаце/Кинчха</li><li>Гелати, Баграти</li></ul></div>
+      <div class="summary-block"><h3>🌊 Шекветили / Уреки</h3><ul><li>Чёрный магнитный песок, сосны</li><li>Радиалки в Батуми (~44 км)</li><li>Цицинатела, Black Sea Arena</li></ul></div>
+      <div class="summary-block"><h3>💧 Боржоми</h3><ul><li>Центральный парк, бювет минералки</li><li>Серные ванны</li><li>По пути на финал в Тбилиси</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ TAB 3: ЖИЛЬЁ ══════════ -->
+<section id="stay" class="tab-content">
+
+  <!-- ─ RUSSIA OUT ─ -->
+  <div class="sec-label">Грузия · ночёвки</div>
+  <div class="stop-row">
+    <div class="sdate cg"><div class="sd">14–15</div><div class="sm">Авг</div><div class="sn">1 ночь</div></div>
+    <div class="sbody" data-stopid="air">
+      <div class="shead"><div class="scity">Аэропорт · прилёт</div><span class="stag st-full">Ночёвка</span></div>
+      <div class="sdesc">✈️ Ночной прилёт 00:35 — ночуем у аэропорта</div>
+      <div class="cards-grid">
+        <div class="prop-card"><div class="prop-inner">
+          <div class="chead"><div class="ctitle"><a href="https://www.booking.com/Share-zU4M6A" target="_blank" class="cname">ibis Tbilisi Airport</a><div class="csource">Booking.com · 500 м от TBS</div></div><span class="cstatus pending">⏳ К брони</span></div>
+          <div class="cspecs"><div class="sp"><span class="sp-l">Тип</span><span class="sp-v" style="font-size:10px">Отель (Accor)</span></div><div class="sp"><span class="sp-l">Гости</span><span class="sp-v" style="font-size:10px">до 4</span></div><div class="sp"><span class="sp-l">Даты</span><span class="sp-v" style="font-size:10px">14–15 авг</span></div></div>
+          <div class="cprice"><div class="cp-total">12 745 ₽</div><div class="cp-nights">1 ночь</div></div>
+          <div class="ctags"><span class="plus">5 мин пешком от терминала</span><span class="plus">Звукоизоляция — самолётов не слышно</span><span class="plus">Ресторан 24/7, бар, фитнес, кондиционер</span><span class="minus">⚠️ Бронь оформить на ночь 14-го (прилёт 00:35)</span><span class="minus">Пока не забронировано</span></div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stop-row">
+    <div class="sdate cr"><div class="sd">15–16</div><div class="sm">Авг</div><div class="sn">1 ночь</div></div>
+    <div class="sbody" data-stopid="sig">
+      <div class="shead"><div class="scity">Виноградники · Сигнахи</div><span class="stag st-full">Ночёвка</span></div>
+      <div class="sdesc">🍇 Кахетия: винодельни и дегустации</div>
+      <div class="cards-grid">
+        <div class="prop-card"><div class="prop-inner">
+          <div class="chead"><div class="ctitle"><a href="https://www.booking.com/Share-CjKNdK" target="_blank" class="cname">Lurji Bani</a><div class="csource">Booking.com · Сигнахи</div></div><span class="cstatus ok">✓ Забронировано</span></div>
+          <div class="cspecs"><div class="sp"><span class="sp-l">Тип</span><span class="sp-v" style="font-size:10px">Гостевой дом</span></div><div class="sp"><span class="sp-l">Гости</span><span class="sp-v" style="font-size:10px">до 6</span></div><div class="sp"><span class="sp-l">Даты</span><span class="sp-v" style="font-size:10px">15–16 авг</span></div></div>
+          <div class="cprice"><div class="cp-total">10 909 ₽</div><div class="cp-nights">1 ночь</div></div>
+          <div class="ctags"><span class="plus">Историческая усадьба-«дом-музей», 2 номера</span><span class="plus">Терраса с видом на Сигнахи и Кавказ</span><span class="plus">Своя винодельня/бар · камин · завтрак</span><span class="minus">Сложно найти без навигатора (у нас авто)</span></div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stop-row">
+    <div class="sdate cg"><div class="sd">16–17</div><div class="sm">Авг</div><div class="sn">1 ночь</div></div>
+    <div class="sbody" data-stopid="tbs">
+      <div class="shead"><div class="scity">Тбилиси</div><span class="stag st-full">Ночёвка</span></div>
+      <div class="sdesc">🏙️ Столица: Старый город, серные бани</div>
+      <div class="cards-grid">
+        <div class="prop-card"><div class="prop-inner">
+          <div class="chead"><div class="ctitle"><a href="https://www.booking.com/Share-Au4C7x3" target="_blank" class="cname">Terrace Tbilisi Center</a><div class="csource">Booking.com · Старый город</div></div><span class="cstatus ok">✓ Забронировано</span></div>
+          <div class="cspecs"><div class="sp"><span class="sp-l">Тип</span><span class="sp-v" style="font-size:10px">Небольшой отель</span></div><div class="sp"><span class="sp-l">Гости</span><span class="sp-v" style="font-size:10px">номер на 4</span></div><div class="sp"><span class="sp-l">Даты</span><span class="sp-v" style="font-size:10px">16–17 авг</span></div></div>
+          <div class="cprice"><div class="cp-total">6 439 ₽</div><div class="cp-nights">1 ночь</div></div>
+          <div class="ctags"><span class="plus">Центр Старого города · 6 мин до пл. Свободы</span><span class="plus">Серные бани рядом · бесплатная парковка</span><span class="plus">Кондиционер · патио · рус/англ</span><span class="minus">Отзывы: слабый кондиционер, шум с улицы</span><span class="minus">Маленькая парковка/санузел</span></div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stop-row">
+    <div class="sdate cr"><div class="sd">17–18</div><div class="sm">Авг</div><div class="sn">1 ночь</div></div>
+    <div class="sbody" data-stopid="kaz">
+      <div class="shead"><div class="scity">Казбеги · Степанцминда</div><span class="stag st-full">Ночёвка</span></div>
+      <div class="sdesc">🏔️ Военно-Грузинская, Гергети, Казбек</div>
+      <div class="cards-grid">
+        <div class="prop-card"><div class="prop-inner">
+          <div class="chead"><div class="ctitle"><a href="https://www.booking.com/Share-7jJ2bAA" target="_blank" class="cname">Grand Mountain Cottage</a><div class="csource">Booking.com · Гарбани, Степанцминда</div></div><span class="cstatus ok">✓ Забронировано</span></div>
+          <div class="cspecs"><div class="sp"><span class="sp-l">Тип</span><span class="sp-v" style="font-size:10px">Шале 45 м²</span></div><div class="sp"><span class="sp-l">Гости</span><span class="sp-v" style="font-size:10px">3 взр + 1 реб</span></div><div class="sp"><span class="sp-l">Даты</span><span class="sp-v" style="font-size:10px">17–18 авг</span></div></div>
+          <div class="cprice"><div class="cp-total">6 767 ₽</div><div class="cp-nights">1 ночь</div></div>
+          <div class="ctags"><span class="plus">«Улучшенное шале» 45 м²: спальня + гостиная</span><span class="plus">Балкон · вид на горы, сад, достопримечательность</span><span class="plus">Двусп. кровать + 2 дивана-кровати · WiFi</span><span class="minus">Магазины далеко (супермаркет ~50 км; рядом мини-маркет)</span></div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stop-row">
+    <div class="sdate cg"><div class="sd">18–19</div><div class="sm">Авг</div><div class="sn">1 ночь</div></div>
+    <div class="sbody" data-stopid="upl">
+      <div class="shead"><div class="scity">Уплисцихе · Гори</div><span class="stag st-full">Ночёвка</span></div>
+      <div class="sdesc">🏛️ Пещерный город, Мцхета по дороге</div>
+      <div class="cards-grid">
+        <div class="prop-card"><div class="prop-inner">
+          <div class="chead"><div class="ctitle"><a href="https://www.booking.com/Share-qTyWY6" target="_blank" class="cname">Chateau Ateni Cottages</a><div class="csource">Booking.com · с. Атени, Гори</div></div><span class="cstatus ok">✓ Забронировано</span></div>
+          <div class="cspecs"><div class="sp"><span class="sp-l">Тип</span><span class="sp-v" style="font-size:10px">Коттеджи при винодельне</span></div><div class="sp"><span class="sp-l">Гости</span><span class="sp-v" style="font-size:10px">до 6</span></div><div class="sp"><span class="sp-l">Даты</span><span class="sp-v" style="font-size:10px">18–19 авг</span></div></div>
+          <div class="cprice"><div class="cp-total">6 534 ₽</div><div class="cp-nights">1 ночь</div></div>
+          <div class="ctags"><span class="plus">Деревянные коттеджи при семейной винодельне (Атени)</span><span class="plus">~10 мин до Уплисцихе · ~4,5 км до Гори (музей Сталина)</span><span class="plus">✓ Ужин с дегустацией — предзаказ сделан · кондиционер, сад</span><span class="minus">Уборка не ежедневная · вид местами на хозпостройки</span></div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stop-row">
+    <div class="sdate cg"><div class="sd">19–22</div><div class="sm">Авг</div><div class="sn">3 ночи</div></div>
+    <div class="sbody" data-stopid="kut">
+      <div class="shead"><div class="scity">Кутаиси · Имеретия</div><span class="stag st-full">Ночёвка</span></div>
+      <div class="sdesc">🌿 Прометей, Гелати, каньоны Мартвили/Окаце</div>
+      <div class="stbd">— не забронировано, ищем</div>
+    </div>
+  </div>
+
+  <div class="stop-row">
+    <div class="sdate cr"><div class="sd">22–28</div><div class="sm">Авг</div><div class="sn">6 ночей</div></div>
+    <div class="sbody" data-stopid="sea">
+      <div class="shead"><div class="scity">Шекветили / Уреки · море</div><span class="stag st-full">Ночёвка</span></div>
+      <div class="sdesc">🌊 Чёрный магнитный песок, сосны</div>
+      <div class="cards-grid">
+        <div class="prop-card"><div class="prop-inner">
+          <div class="chead"><div class="ctitle"><a href="https://www.booking.com/Share-bJ0I0F" target="_blank" class="cname">Vakho house — 1 этаж</a><div class="csource">Booking.com · Уреки</div></div><span class="cstatus ok">✓ Забронировано</span></div>
+          <div class="cspecs"><div class="sp"><span class="sp-l">Тип</span><span class="sp-v" style="font-size:10px">Дом · 2 спальни</span></div><div class="sp"><span class="sp-l">Гости</span><span class="sp-v" style="font-size:10px">до 6</span></div><div class="sp"><span class="sp-l">Даты</span><span class="sp-v" style="font-size:10px">22–28 авг</span></div></div>
+          <div class="cprice"><div class="cp-total">68 599 ₽</div><div class="cp-nights">6 ночей · ≈11 433 ₽/ночь</div></div>
+          <div class="ctags"><span class="plus">Отдельный дом, свой вход · 2 спальни</span><span class="plus">Полная кухня · кондиционер · стиралка · терраса</span><span class="plus">~10–12 мин пешком до магнитного пляжа Уреки · парковка</span><span class="minus">1 санузел на 2 спальни · до моря пешком (не первая линия)</span></div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-label">Возврат · мягкий путь</div>
+  <div class="stop-row">
+    <div class="sdate cg"><div class="sd">28–29</div><div class="sm">Авг</div><div class="sn">1 ночь</div></div>
+    <div class="sbody" data-stopid="bor">
+      <div class="shead"><div class="scity">Боржоми</div><span class="stag st-full">Ночёвка</span></div>
+      <div class="sdesc">💧 Минеральный парк, источник, серные ванны</div>
+      <div class="stbd">— не забронировано, ищем</div>
+    </div>
+  </div>
+
+  <div class="stop-row">
+    <div class="sdate cg"><div class="sd">29–30</div><div class="sm">Авг</div><div class="sn">1 ночь</div></div>
+    <div class="sbody" data-stopid="tbf">
+      <div class="shead"><div class="scity">Тбилиси · финал</div><span class="stag st-full">Ночёвка</span></div>
+      <div class="sdesc">🏙️ Последний день · утром 30-го сдать авто, вылет 12:45</div>
+      <div class="stbd">— не забронировано, ищем</div>
+    </div>
+  </div>
+
+  <div style="max-width:920px;margin:24px auto 0;padding:14px 18px;background:#f6efe3;border:1px solid var(--brown);border-radius:6px;">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:19px;color:var(--dark);">Итого за проживание</div>
+    <div style="font-size:13px;color:var(--dark);margin-top:5px;">Забронировано 11 ночей: <strong>111 993 ₽</strong> &nbsp;·&nbsp; на троих <strong>37 331 ₽</strong></div>
+    <div style="font-size:11px;color:var(--muted);margin-top:4px;">Ещё не забронировано: Кутаиси (3 н), Боржоми (1 н), финал-Тбилиси (1 н)</div>
+  </div>
+
+  <p style="font-size:10px;color:var(--muted);margin-top:16px;text-align:right;">Курс ЦБ: 1 $ = 71.67 ₽ · Обновлено: май 2026</p>
+
+</section>
+
+
+<!-- ══════════ TAB 4: ГИД ══════════ -->
+<section id="guide" class="tab-content">
+
+  <div class="sec-label">Гид по дням</div>
+  <div class="guide-note">⚠️ Цены ориентировочны (курс ~30 ₽/₾, уточнить), часы работы проверяйте перед визитом. <b>⏱ — сколько времени закладывать</b> на точку. Кликните на день, чтобы раскрыть.</div>
+
+  <div class="day-card">
+    <div class="day-head" onclick="toggleDay(this)"><div class="day-date-badge">14 авг</div><div class="day-title">Прилёт<div class="day-teaser">Ночной рейс, ibis у аэропорта</div></div><div class="day-arrow">▸</div></div>
+    <div class="day-body">
+      <div class="gblock"><h4>Сценарий</h4><ul><li><span class="gtime">20:10</span> вылет Москва (Жуковский)</li><li><span class="gtime">00:35</span> прилёт Тбилиси (15-го), 5 мин пешком в ibis — спать</li><li>Утром 15-го: <span class="gtime">11:00</span> прокат авто в аэропорту</li></ul></div>
+      <div class="gblock"><h4>Особенности</h4><p>Ничего не планируем на раннее утро 15-го — выспаться после ночного перелёта.</p></div>
+    </div>
+  </div>
+
+  <div class="day-card open">
+    <div class="day-head" onclick="toggleDay(this)"><div class="day-date-badge">15 авг</div><div class="day-title">Кахетия · Сигнахи<div class="day-teaser">«Город любви», вино в квеври, монастырь св. Нино</div></div><div class="day-arrow">▸</div></div>
+    <div class="day-body">
+      <div class="gblock"><h4>Зачем сюда обязательно</h4><p>Кахетия — колыбель виноделия (8000 лет), а Сигнахи — самый романтичный городок Грузии: черепичные крыши на холме над бескрайней Алазанской долиной, вдали снежный Кавказ.</p></div>
+      <div class="gblock"><h4>Сценарий дня</h4><ul>
+        <li><span class="gtime">11:00</span> забираем авто → ~2 ч до Сигнахи</li>
+        <li><span class="gtime">~13:00</span> заселение (Lurji Bani), обед</li>
+        <li><span class="gtime">14:30</span> прогулка по Сигнахи</li>
+        <li><span class="gtime">16:00</span> винодельня Pheasant&#39;s Tears — дегустация + кухня</li>
+        <li><span class="gtime">вечер</span> закат над Алазанской долиной с террасы</li>
+      </ul></div>
+      <div class="gblock"><h4>Что посмотреть · сколько времени</h4><ul>
+        <li><b>Сигнахи (город)</b> <span class="gdur">⏱ ~1,5–2 ч</span> — <span class="gfree">бесплатно</span>, пешком. Крепостные стены XVIII в. (~4 км, 23 башни), смотровые.</li>
+        <li><b>Монастырь Бодбе</b> <span class="gdur">⏱ ~45 мин – 1 ч</span> (+источник +1 ч) — <span class="gfree">бесплатно</span> · <span class="ghours">~09:00–18:00</span> · дресс-код. Святой источник св. Нино ~1–2 км вниз пешком (белая рубаха на месте). Фото в храмах нельзя.</li>
+        <li><b>Pheasant&#39;s Tears</b> <span class="gdur">⏱ ~1,5–2 ч</span> — дегустация/обед <span class="gprice">~30–40 ₾/чел</span>, карты, бронь заранее. Вина в квеври (киси, мцване, саперави, янтарное), чача.</li>
+      </ul></div>
+      <div class="gblock"><h4>История, факты, мифы</h4><ul>
+        <li>Сигнахи — <b>«город любви»</b>: круглосуточный ЗАГС, поженят за 15 минут.</li>
+        <li>Бодбе — место погребения <b>св. Нино</b>, крестительницы Грузии (IV в.). Легенда: царю Мириану приснились 4 звезды над горами Грузии, один луч упал у Бодбе.</li>
+        <li><b>«Слёзы фазана»</b>: по легенде, вино так чисто, что даже фазан плачет от его вкуса.</li>
+        <li>Квеври-виноделие — в списке наследия ЮНЕСКО.</li>
+      </ul></div>
+      <div class="gblock"><h4>Гастрономия</h4><p>Обязательно — <b>янтарное вино</b> в квеври и <b>чача</b>. Мцвади (шашлык на лозе), хинкали, чурчхела (родом из Кахетии), сыр гуда.</p></div>
+    </div>
+  </div>
+
+  <div class="day-card">
+    <div class="day-head" onclick="toggleDay(this)"><div class="day-date-badge">16 авг</div><div class="day-title">Тбилиси · пешая прогулка<div class="day-teaser">Старый город, серные бани, крепость</div></div><div class="day-arrow">▸</div></div>
+    <div class="day-body">
+      <div class="gblock"><h4>Зачем сюда</h4><p>Живая эклектичная столица: резные балконы, храмы, модерн, серные бани и вид с крепости на весь город.</p></div>
+      <div class="gblock"><h4>Пеший маршрут <span class="gdur">⏱ ~4–5 ч с остановками</span></h4><ul>
+        <li><b>1. пл. Свободы</b> — старт, памятник св. Георгию.</li>
+        <li><b>2. ул. Коте Абхази (Леселидзе)</b> — главная улица Старого города, кафе, сувениры.</li>
+        <li><b>3. Сиони + Джума-мечеть + Норашен</b> <span class="gdur">⏱ 20 мин</span> — храмы разных конфессий рядом.</li>
+        <li><b>4. Мейдан → Абанотубани</b> (серные бани) + водопад Легвтахеви <span class="gdur">⏱ 20 мин</span> — сердце старого города.</li>
+        <li><b>5. Крепость Нарикала</b> <span class="gdur">⏱ ~1 ч</span> — пешком или канатка от парка Рике <span class="gprice">(~2–5 ₾)</span>; лучшие виды. Рядом «Мать-Грузия».</li>
+        <li><b>6. Мост Мира + парк Рике</b> <span class="gdur">⏱ 30 мин</span> — стеклянный мост, современный парк.</li>
+        <li><b>7. Метехи</b> — храм и памятник Вахтангу Горгасали над рекой.</li>
+        <li><b>8. вечер: проспект Руставели</b> — опера, музеи, винные бары.</li>
+      </ul></div>
+      <div class="gblock"><h4>Отдельно</h4><p><b>Серные бани</b> — отдельная комната <span class="gprice">~80–150 ₾/час на компанию</span> <span class="gdur">⏱ 1–1,5 ч</span>. Классика Тбилиси, можно взять кисе-массаж.</p></div>
+      <div class="gblock"><h4>Факт / миф</h4><p>Тбилиси значит «тёплый»: царь Вахтанг Горгасали ранил на охоте оленя, тот исцелился в горячем источнике — и на месте тёплых вод основали город.</p></div>
+      <div class="gblock"><h4>Гастрономия</h4><p>Хачапури по-аджарски (лодочка с яйцом), хинкали (есть руками, «хвостик» не едят), лобиани, лимонад «Натахтари».</p></div>
+    </div>
+  </div>
+
+  <div class="day-card">
+    <div class="day-head" onclick="toggleDay(this)"><div class="day-date-badge">17 авг</div><div class="day-title">Тбилиси → Казбеги<div class="day-teaser">Военно-Грузинская, Пасанаури (хинкали), Гергети</div></div><div class="day-arrow">▸</div></div>
+    <div class="day-body">
+      <div class="gblock"><h4>Зачем сюда обязательно</h4><p>Одна из красивейших горных дорог мира и открыточная церковь Гергети на фоне пятитысячника Казбек.</p></div>
+      <div class="gblock"><h4>Остановки по дороге (~3,5 ч + стопы)</h4><ul>
+        <li><b>Жинвальское водохранилище</b> <span class="gdur">⏱ фотостоп</span> — бирюзовая вода в горах. Тут есть прокат <b>сапов (SUP)</b> — опц. (Ананури осмотрим на обратном пути 18-го.)</li>
+        <li><b>Пасанаури — родина хинкали</b> <span class="gdur">⏱ ~1 ч (обед)</span>. Деревня у слияния Белой и Чёрной Арагви; хинкали лепят при вас, рядом речная форель.</li>
+        <li><b>Гудаури</b> <span class="gdur">⏱ фотостоп</span> — горнолыжный курорт, панорама; летом бывает параглайдинг.</li>
+        <li><b>Монумент дружбы</b> <span class="gdur">⏱ 15–20 мин</span> — советская мозаика (1983) на краю Гудаурского ущелья.</li>
+      </ul></div>
+      <div class="gblock"><h4>В Казбеги</h4><ul>
+        <li>Заселение (Grand Mountain Cottage · «улучшенное шале» 45 м²).</li>
+        <li><b>Троицкая церковь Гергети</b> (2170 м) <span class="gdur">⏱ ~2–3 ч</span> — <span class="gfree">бесплатно</span>. Пешком 1,5–2 ч вверх или заброска 4×4 <span class="gprice">~50–70 ₾</span>. Дресс-код.</li>
+      </ul></div>
+      <div class="gblock"><h4>Факт / миф</h4><p>По легенде, к Казбеку прикован <b>Амирани</b> — грузинский Прометей — за то, что дал людям огонь. Хинкали, по преданию, придумала сестра, чтобы выхаживать раненого брата: сочное мясо в тесте легко есть.</p></div>
+      <div class="gblock"><h4>Гастрономия</h4><p>Хинкали (Пасанаури!), кубдари (мясной пирог), домашний сыр, форель, чай с чабрецом.</p></div>
+      <div class="gblock"><h4>Особенности</h4><p>Высота — одеться теплее, погода переменчива; серпантин — не гнать, за рулём отдохнувший водитель.</p></div>
+    </div>
+  </div>
+
+  <div class="day-card">
+    <div class="day-head" onclick="toggleDay(this)"><div class="day-date-badge">18 авг</div><div class="day-title">Спуск: Ананури → Мцхета → Гори<div class="day-teaser">Крепость, древняя столица, музей Сталина</div></div><div class="day-arrow">▸</div></div>
+    <div class="day-body">
+      <div class="gblock"><h4>Сценарий (спуск ~2,5 ч + точки)</h4><ul>
+        <li><b>Ананури</b> <span class="gdur">⏱ ~30–45 мин</span> — <span class="gfree">бесплатно</span>. Крепость XVII в. на берегу Жинвальского водохранилища. Тут же <b>сапы (SUP)</b> по бирюзовой воде — опц.</li>
+        <li><b>Мцхета</b> <span class="gdur">⏱ ~1–1,5 ч (13:00–15:00)</span> — городок маленький: <b>Джвари</b> (VI в., на горе над слиянием Куры и Арагви) <span class="gdur">⏱ 20–30 мин</span> + <b>Светицховели</b> (XI в., по преданию хитон Христа) <span class="gdur">⏱ 30–40 мин</span>. Оба <span class="gfree">бесплатно</span>, дресс-код.</li>
+        <li><b>Гори · Музей Сталина</b> <span class="gdur">⏱ ~1 ч</span> — <span class="gprice">~15 ₾</span>. Дом рождения, личный ж/д вагон.</li>
+      </ul></div>
+      <div class="gblock"><h4>Ночёвка</h4><p><b>Chateau Ateni</b> (винодельня, ужин с дегустацией — предзаказан). Уплисцихе в 10 мин — осмотрим завтра утром на свежую голову.</p></div>
+      <div class="gblock"><h4>Факт</h4><p>Джвари воспета Лермонтовым в «Мцыри»: «Там, где, сливаяся, шумят… две сестры, Арагва и Кура».</p></div>
+    </div>
+  </div>
+
+  <div class="day-card">
+    <div class="day-head" onclick="toggleDay(this)"><div class="day-date-badge">19 авг</div><div class="day-title">Уплисцихе → Кутаиси<div class="day-teaser">Утром пещерный город, переезд в Имеретию</div></div><div class="day-arrow">▸</div></div>
+    <div class="day-body">
+      <div class="gblock"><h4>Утро</h4><ul>
+        <li><b>Уплисцихе</b> <span class="gdur">⏱ ~1,5–2,5 ч</span> — <span class="gprice">~15–20 ₾</span>. Вырубленный в скале город ~3000 лет: 700+ помещений, «зал царицы Тамар», языческие капища, тайный тоннель к реке; на выходе винодельня.</li>
+      </ul></div>
+      <div class="gblock"><h4>Переезд + вечер</h4><ul>
+        <li>~2 ч по трассе Рикоти → Кутаиси, заселение.</li>
+        <li>Вечер <span class="gdur">⏱ ~1–1,5 ч</span>: фонтан Колхиды (золотые фигуры), Белый мост, Зелёный базар.</li>
+      </ul></div>
+      <div class="gblock"><h4>Факт / особенности</h4><p>Кутаиси — столица древней Колхиды, куда плыли аргонавты за золотым руном. Уплисцихе: нескользящая обувь, нет ограждений (следить за ребёнком), тени нет — вода/шляпа.</p></div>
+      <div class="gblock"><h4>Гастрономия</h4><p>Имеретинский хачапури (закрытый), сацебели, аджика, имеретинский сыр.</p></div>
+    </div>
+  </div>
+
+  <div class="day-card">
+    <div class="day-head" onclick="toggleDay(this)"><div class="day-date-badge">20 авг</div><div class="day-title">Кутаиси · Каньоны<div class="day-teaser">Мартвили (лодка) + Окаце/Кинчха</div></div><div class="day-arrow">▸</div></div>
+    <div class="day-body">
+      <div class="gblock"><h4>Зачем сюда</h4><p>Бирюзовые каньоны с водопадами, лодочная прогулка и подвесная тропа над пропастью. Два каньона — это <b>полный день</b> с дорогой между ними (~1 ч).</p></div>
+      <div class="gblock"><h4>Что посмотреть · время</h4><ul>
+        <li><b>Каньон Мартвили</b> <span class="gdur">⏱ ~1–1,5 ч</span> — вход <span class="gprice">~17–20 ₾</span>. Круговая тропа ~700 м (~40–50 мин) + <b>лодка по реке Абаша</b> ~300 м (~20 мин, <span class="gprice">+15 ₾</span>, 6 чел + инструктор). Бирюзовая вода, водопады. «Купальня князей Дадиани».</li>
+        <li><b>Каньон Окаце</b> <span class="gdur">⏱ ~2–3 ч</span> — вход <span class="gprice">~20–30 ₾</span>. Подвесная тропа 780 м над пропастью через лес Дадиани; вниз пешком ~5 км или 4×4 от центра. Иногда закрыт на ремонт → тогда <b>водопад Кинчха</b> <span class="gdur">⏱ ~1 ч</span> вместо.</li>
+        <li><span class="ghours">Часы обычно ~10:00–17:00 (уточнить).</span></li>
+      </ul></div>
+      <div class="gblock"><h4>Особенности</h4><p>Удобная обувь; в дождь лодки отменяют (поднимается уровень реки). Выезжать пораньше — успеть оба каньона.</p></div>
+    </div>
+  </div>
+
+  <div class="day-card">
+    <div class="day-head" onclick="toggleDay(this)"><div class="day-date-badge">21 авг</div><div class="day-title">Кутаиси · Прометей и Гелати<div class="day-teaser">Пещера (лодка) + монастырь ЮНЕСКО</div></div><div class="day-arrow">▸</div></div>
+    <div class="day-body">
+      <div class="gblock"><h4>Что посмотреть · время</h4><ul>
+        <li><b>Пещера Прометея</b> (Цхалтубо) <span class="gdur">⏱ ~1–1,5 ч</span> — вход <span class="gprice">~25–40 ₾</span>. Маршрут ~1 ч по залам со сталактитами + <b>лодка по подземной реке</b> на выходе (<span class="gprice">~15 ₾</span>, опц.). Крупнейшая пещера Грузии. <span class="ghours">Пн выходной.</span></li>
+        <li><b>Монастырь Гелати</b> (XII в., ЮНЕСКО) <span class="gdur">⏱ ~30–45 мин</span> — <span class="gfree">бесплатно</span>. Фрески, «академия» Давида Строителя.</li>
+        <li><b>Сатаплия</b> <span class="gdur">⏱ ~1–1,5 ч</span> — <span class="gprice">~20 ₾</span>. Следы динозавров + пещера + стеклянная смотровая площадка.</li>
+        <li><b>Баграти</b> <span class="gdur">⏱ ~20–30 мин</span> — <span class="gfree">бесплатно</span>. Символ Кутаиси.</li>
+      </ul></div>
+      <div class="gblock"><h4>Факт / миф</h4><p>По мифу, к скале на Кавказе был прикован <b>Прометей</b> — отсюда имя пещеры. В Гелати — усыпальница Давида Строителя; его надгробие по завещанию у входа, чтобы каждый входящий ступал по нему.</p></div>
+      <div class="gblock"><h4>Особенности</h4><p>В пещере +14 °C — взять кофту; Гелати — дресс-код.</p></div>
+    </div>
+  </div>
+
+  <div class="day-card">
+    <div class="day-head" onclick="toggleDay(this)"><div class="day-date-badge">22 авг</div><div class="day-title">→ Шекветили / Уреки<div class="day-teaser">Переезд на Чёрное море</div></div><div class="day-arrow">▸</div></div>
+    <div class="day-body">
+      <div class="gblock"><h4>Сценарий</h4><p>~2 ч Кутаиси → Уреки/Шекветили, заселение (Vakho house), первый пляж.</p></div>
+      <div class="gblock"><h4>Рядом с базой</h4><ul>
+        <li><b>Магнитный чёрный песок</b> Уреки/Шекветили — считается лечебным.</li>
+        <li><b>Дендропарк Шекветили</b> <span class="gdur">⏱ ~1–2 ч</span> — коллекция огромных пересаженных деревьев у моря.</li>
+        <li><b>«Цицинатела»</b> (парк аттракционов, вечер), <b>Black Sea Arena</b>.</li>
+      </ul></div>
+      <div class="gblock"><h4>Гастрономия</h4><p>Свежая рыба, барабуля, мидии; аджарское хачапури у моря.</p></div>
+    </div>
+  </div>
+
+  <div class="day-card">
+    <div class="day-head" onclick="toggleDay(this)"><div class="day-date-badge">23–27 авг</div><div class="day-title">Море + побережье<div class="day-teaser">5 дней: пляж, Батуми и вся Аджария</div></div><div class="day-arrow">▸</div></div>
+    <div class="day-body">
+      <div class="gblock"><h4>Как построить</h4><p>База — Уреки/Шекветили. Чередуем пляжные дни и радиалки (Батуми ~44 км / ~1 ч). <b>Сапы (SUP)</b> — прокат на пляжах Уреки и в Батуми <span class="gdur">⏱ по желанию</span>.</p></div>
+      <div class="gblock"><h4>Батуми и рядом</h4><ul>
+        <li><b>Батуми</b> <span class="gdur">⏱ полдня–день</span> — бульвар, движущаяся статуя «Али и Нино», пьяцца, Алфавитная башня, канатка «Арго» <span class="gprice">(~20 ₾)</span>.</li>
+        <li><b>Ботанический сад Батуми</b> (Зелёный мыс, ~9 км С) <span class="gdur">⏱ ~2–3 ч</span> — один из крупнейших на постсоветском пространстве, у моря.</li>
+      </ul></div>
+      <div class="gblock"><h4>Что кроме Батуми (южнее)</h4><ul>
+        <li><b>Крепость Гонио</b> (~15 км Ю) <span class="gdur">⏱ ~30 мин</span> — <span class="gprice">~5 ₾</span>. Римская крепость I в., возможная могила апостола Матфия.</li>
+        <li><b>Пляж Квариати</b> <span class="gdur">⏱ пляжный день</span> — чистейшая вода, горы; дайвинг. Рядом <b>Сарпи</b> (у границы, самая прозрачная вода).</li>
+        <li><b>Нац. парк Мтирала</b> (~25 км) <span class="gdur">⏱ полдня</span> — субтропический дождевой лес («плачущая гора»), тропы, зиплайн, водопады, озеро.</li>
+      </ul></div>
+      <div class="gblock"><h4>Аджарские горы (восточнее)</h4><ul>
+        <li><b>Водопад Махунцети</b> (~30 км) <span class="gdur">⏱ ~45 мин–1 ч</span> — 50 м водопад + <b>арочный мост царицы Тамар</b> (XII в.); можно купаться. По пути — Аджарский винный дом.</li>
+      </ul></div>
+      <div class="gblock"><h4>К северу (по пути домой удобно)</h4><ul>
+        <li><b>Крепость Петра</b> (Цихисдзири, между Батуми и Кобулети) <span class="gdur">⏱ ~30–45 мин</span> — крепость 535 г., террасные сады, «скрытый пляж».</li>
+        <li><b>Кобулети</b> — тихий галечный курорт; рядом <b>Колхети</b> (нац. парк, птицы, болота).</li>
+      </ul></div>
+      <div class="gblock"><h4>Гастрономия</h4><p>Аджарское хачапури — здесь его <b>родина</b>; синори, борано, морепродукты (в Гонио — Mama Manana), чурчхела, вино и лимонады.</p></div>
+    </div>
+  </div>
+
+  <div class="day-card">
+    <div class="day-head" onclick="toggleDay(this)"><div class="day-date-badge">28 авг</div><div class="day-title">Боржоми<div class="day-teaser">Парк с источником, канатка, серные бассейны</div></div><div class="day-arrow">▸</div></div>
+    <div class="day-body">
+      <div class="gblock"><h4>Зачем сюда</h4><p>Знаменитая минералка прямо из источника + хвойный курорт-парк в ущелье. Разбивает длинный перегон с моря.</p></div>
+      <div class="gblock"><h4>Центральный парк <span class="gdur">⏱ ~2–3 ч всего</span></h4><ul>
+        <li>Вход в парк <span class="gprice">~2–5 ₾</span>.</li>
+        <li><b>Бювет</b> <span class="gdur">⏱ 10 мин</span> — попробовать тёплую минералку прямо из источника (<span class="gfree">бесплатно</span>). Вкус специфический — солоновато-железистый.</li>
+        <li><b>Канатная дорога</b> <span class="gdur">⏱ ~30–40 мин</span> — <span class="gprice">~15 ₾ туда-обратно</span>, наверх к колесу обозрения и плато, виды на ущелье.</li>
+        <li><b>Тропа вверх по парку</b> ~2,3 км (~30–40 мин) → <b>открытые серные бассейны</b> <span class="gdur">⏱ ~1 ч</span> — купание <span class="gfree">бесплатно</span>, тёплая вода под открытым небом.</li>
+      </ul></div>
+      <div class="gblock"><h4>Факт</h4><p>«Боржоми» разливают с 1890-х; воду «открыли» солдаты Романовых, и она стала любимой при царском дворе.</p></div>
+      <div class="gblock"><h4>Особенности</h4><p>Для серных бассейнов — купальник и тапки; вверх по парку идти пешком (можно и на канатке к плато).</p></div>
+    </div>
+  </div>
+
+  <div class="day-card">
+    <div class="day-head" onclick="toggleDay(this)"><div class="day-date-badge">29 авг</div><div class="day-title">Финал · Тбилиси<div class="day-teaser">Последний день в столице</div></div><div class="day-arrow">▸</div></div>
+    <div class="day-body">
+      <div class="gblock"><h4>Сценарий</h4><p>~2,5 ч Боржоми → Тбилиси, заселение. Что не успели 16-го: бани, сувениры, прощальный ужин-супра.</p></div>
+      <div class="gblock"><h4>Что привезти</h4><p>Вино/чача, чурчхела, аджика, сванская соль, керамика-квеври, эмаль минанкари.</p></div>
+      <div class="gblock"><h4>Гастрономия</h4><p>Прощальный супра: хинкали, хачапури, шашлык, вино и тост от тамады.</p></div>
+    </div>
+  </div>
+
+  <div class="day-card">
+    <div class="day-head" onclick="toggleDay(this)"><div class="day-date-badge">30 авг</div><div class="day-title">Вылет<div class="day-teaser">Сдать авто, домой</div></div><div class="day-arrow">▸</div></div>
+    <div class="day-body">
+      <div class="gblock"><h4>Сценарий</h4><ul><li>Утром сдать авто в аэропорту к <span class="gtime">09:00</span></li><li>Рейс <span class="gtime">12:45</span> → Москва <span class="gtime">15:00</span></li></ul></div>
+    </div>
+  </div>
+
+</section>
+
+
+<script>
+/* ── TABS ── */
+function showTab(id,btn){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if(id==='map') setTimeout(replayMapAnimation,30);
+}
+
+/* ── REACTIONS ── */
+document.addEventListener('DOMContentLoaded',()=>{ initMap(); });
+
+/* ── MAP ── */
+const CITIES=[
+  {id:'tbilisi',    x:705, y:400, name:'Тбилиси',   day:'16–17', type:'stay', stop:'tbs', desc:'🏙️ Столица: старт (16–17) и финал (29–30) · вылет 30-го'},
+  {id:'sighnaghi',  x:885, y:430, name:'Сигнахи',   day:'15–16', type:'key',  stop:'sig', desc:'🍇 Кахетия: виноградники и дегустации'},
+  {id:'kazbegi',    x:665, y:115, name:'Казбеги',   day:'17–18', type:'key',  stop:'kaz', desc:'🏔️ Военно-Грузинская, Гергети, виды на Казбек · 1750 м'},
+  {id:'mtskheta',   x:655, y:300, name:'Мцхета',    day:'18',    type:'transit',         desc:'⛪ Транзит 18-го: Джвари, Светицховели (13–15)'},
+  {id:'uplistsikhe',x:505, y:330, name:'Уплисцихе', day:'18–19', type:'stay', stop:'upl', desc:'🏛️ Пещерный город + Гори (музей Сталина)'},
+  {id:'kutaisi',    x:290, y:195, name:'Кутаиси',   day:'19–22', type:'stay', stop:'kut', desc:'🌿 Имеретия: Прометей, Мартвили, Окаце, Гелати'},
+  {id:'shekvetili', x:120, y:300, name:'Шекветили', day:'22–28', type:'key',  stop:'sea', desc:'🌊 Чёрный магнитный песок, сосны, море'},
+  {id:'borjomi',    x:420, y:350, name:'Боржоми',   day:'28–29', type:'stay', stop:'bor', desc:'💧 Минеральный парк, источник, серные ванны'},
+];
+
+// основной ход к морю
+const OUT_ROUTE = ['sighnaghi','tbilisi','kazbegi','uplistsikhe','kutaisi','shekvetili'];
+// обратно через Боржоми
+const RET_ROUTE = ['shekvetili','borjomi','tbilisi'];
+
+function toggleDay(el){ el.parentElement.classList.toggle('open'); }
+function cityById(id){ return CITIES.find(c=>c.id===id); }
+
+function buildSmoothPath(ids){
+  const pts=ids.map(cityById);
+  if(pts.length<2) return '';
+  let d=`M ${pts[0].x},${pts[0].y}`;
+  for(let i=1;i<pts.length;i++){
+    const p=pts[i-1], c=pts[i];
+    const cx=(p.x+c.x)/2, cy=(p.y+c.y)/2;
+    d+=` Q ${p.x},${cy} ${cx},${cy} T ${c.x},${c.y}`;
+  }
+  return d;
+}
+
+function initMap(){
+  const pathsGroup=document.getElementById('route-paths');
+  const markersGroup=document.getElementById('city-markers');
+  if(!pathsGroup||!markersGroup) return;
+
+  // outbound path
+  const outPath=document.createElementNS('http://www.w3.org/2000/svg','path');
+  outPath.setAttribute('d', buildSmoothPath(OUT_ROUTE));
+  outPath.setAttribute('class','route-path');
+  pathsGroup.appendChild(outPath);
+
+  // return path (with offset to differentiate from outbound)
+  const retPath=document.createElementNS('http://www.w3.org/2000/svg','path');
+  retPath.setAttribute('d', buildSmoothPath(RET_ROUTE));
+  retPath.setAttribute('class','route-return');
+  pathsGroup.appendChild(retPath);
+
+  // city markers
+  CITIES.forEach(c=>{
+    const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.setAttribute('class','city t-'+c.type);
+    g.setAttribute('transform',`translate(${c.x},${c.y})`);
+    const r = c.type==='key' ? 16 : (c.type==='stay' ? 13 : 10);
+    g.innerHTML =
+      `<circle class="city-circle" r="${r}"/>`+
+      `<text class="city-day" y="0">${c.day}</text>`+
+      `<text class="city-name" x="0" y="${-r-7}" text-anchor="middle">${c.name}</text>`+
+      `<circle class="hit" r="${r+18}"/>`;
+    g.addEventListener('mouseenter',e=>showTooltip(e,c));
+    g.addEventListener('mousemove',e=>moveTooltip(e));
+    g.addEventListener('mouseleave',hideTooltip);
+    g.addEventListener('click',()=>onCityClick(c));
+    markersGroup.appendChild(g);
+  });
+}
+
+function showTooltip(e,c){
+  const tt=document.getElementById('map-tooltip');
+  tt.innerHTML=
+    `<div class="tt-name">${c.name}</div>`+
+    `<div class="tt-desc">${c.desc}</div>`+
+    (c.stop?`<div class="tt-action">▸ Кликни — открыть жильё</div>`:'');
+  tt.classList.add('show');
+  moveTooltip(e);
+}
+function moveTooltip(e){
+  const tt=document.getElementById('map-tooltip');
+  const w=tt.offsetWidth, h=tt.offsetHeight;
+  let x=e.clientX+14, y=e.clientY+14;
+  if(x+w>window.innerWidth-10) x=e.clientX-w-14;
+  if(y+h>window.innerHeight-10) y=e.clientY-h-14;
+  tt.style.left=x+'px'; tt.style.top=y+'px';
+}
+function hideTooltip(){ document.getElementById('map-tooltip').classList.remove('show'); }
+
+function onCityClick(c){
+  if(!c.stop) return;
+  hideTooltip();
+  document.querySelector('.tab-btn[onclick*="stay"]').click();
+  setTimeout(()=>{
+    const target=document.querySelector(`.sbody[data-stopid="${c.stop}"]`);
+    if(target){
+      target.scrollIntoView({behavior:'smooth',block:'center'});
+      const row=target.closest('.stop-row');
+      if(row){
+        row.classList.add('scroll-highlight');
+        setTimeout(()=>row.classList.remove('scroll-highlight'),1800);
+      }
+    }
+  },120);
+}
+
+function replayMapAnimation(){
+  document.querySelectorAll('.route-path,.route-return').forEach(p=>{
+    p.style.animation='none';
+    p.offsetHeight;
+    p.style.animation='';
+  });
+}
+</script>
+</body>
+</html>
