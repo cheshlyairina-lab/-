@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ренситет — тест передачи данных</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px; background: #f4efff; color: #302346; font-family: Arial, sans-serif; }
+    main { width: 100%; max-width: 520px; padding: 36px; border-radius: 24px; background: white; box-shadow: 0 16px 50px #4c28751a; }
+    .brand { color: #7846ac; font-weight: bold; letter-spacing: .08em; }
+    h1 { font-size: 26px; line-height: 1.25; }
+    p { line-height: 1.5; }
+    label { display: block; margin: 24px 0 8px; font-weight: bold; }
+    input, select, button { width: 100%; padding: 14px; border-radius: 12px; font: inherit; }
+    input, select { border: 1px solid #cfc3df; background: white; color: inherit; }
+    button { margin-top: 24px; border: 0; background: #7744ad; color: white; cursor: pointer; font-weight: bold; }
+    button:disabled { opacity: .6; cursor: wait; }
+    :focus-visible { outline: 3px solid #bd99e5; outline-offset: 3px; }
+    #status { min-height: 48px; margin-bottom: 0; }
+    @media (max-width: 480px) { main { padding: 24px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="brand">РЕНСИТЕТ</div>
+    <h1>Тест передачи данных</h1>
+    <p>Заполни форму и отправь пробный ответ в Google Таблицу.</p>
+    <form id="test-form">
+      <label for="user">Тестовый код участника</label>
+      <input id="user" name="user" placeholder="Например, Тест 001" required maxlength="100">
+      <label for="answer">Как ты чаще используешь ИИ?</label>
+      <select id="answer" name="answer" required>
+        <option value="Работа с текстами">Работа с текстами</option>
+        <option value="Анализ информации">Анализ информации</option>
+        <option value="Генерация идей">Генерация идей</option>
+      </select>
+      <button id="submit-button" type="submit">Отправить результат</button>
+    </form>
+    <p id="status" role="status" aria-live="polite"></p>
+  </main>
+  <script>
+    const URL = "https://script.google.com/macros/s/AKfycbxtUtRSKdDritLUa3DkXpym0kNu6JXs-uEhKrpYTVkfM0DyQraz7p7cPT0O4Bh1Hug/exec";
+    const form = document.getElementById("test-form");
+    const status = document.getElementById("status");
+    const button = document.getElementById("submit-button");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const user = document.getElementById("user").value.trim();
+      const answer = document.getElementById("answer").value;
+      if (!user) {
+        status.textContent = "Введи тестовый код участника.";
+        document.getElementById("user").focus();
+        return;
+      }
+      button.disabled = true;
+      status.textContent = "Отправляем…";
+      try {
+        await fetch(URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "text/plain" },
+          body: JSON.stringify({ user, answer })
+        });
+        // Ответ непрозрачен в режиме no-cors: запись проверяется в таблице.
+        status.textContent = "Запрос отправлен. Проверь, появилась ли новая строка в Google Таблице.";
+      } catch (error) {
+        status.textContent = "Не удалось отправить запрос. Проверь подключение к интернету и попробуй снова.";
+      } finally {
+        button.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
